@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartExpense Dashboard</title>
+  <!-- CSS link -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="logo">SmartExpense</div>
+  <button id="logoutBtn">Logout</button>
+</header>
+
+<!-- MAIN DASHBOARD -->
+<main class="dashboard">
+
+  <!-- LEFT PANEL -->
+  <aside class="left-panel">
+
+    <div class="summary-card">
+      <h4>Total Income</h4>
+      <p id="totalIncome">₹0</p>
+    </div>
+
+    <div class="summary-card">
+      <h4>Total Expenses</h4>
+      <p id="totalExpenses">₹0</p>
+    </div>
+
+    <div class="summary-card highlight">
+      <h4>Balance</h4>
+      <p id="balance">₹0</p>
+    </div>
+
+    <div class="card">
+      <h3>Set / Update Income</h3>
+      <input type="number" id="incomeInput" placeholder="Enter income" />
+      <button id="saveIncome">Save</button>
+      <button id="resetIncome" class="danger">Reset</button>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <section class="right-panel">
+
+    <div class="card">
+      <h3>Add Expense</h3>
+      <form id="expenseForm">
+        <input type="text" id="title" placeholder="Title" required />
+        <input type="text" id="category" placeholder="Category" required />
+        <input type="number" id="amount" placeholder="Amount" required />
+        <input type="date" id="date" required />
+        <button type="submit">Add Expense</button>
+      </form>
+    </div>
+
+    <div class="card expense-list">
+      <h3>Expenses</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="expenseTable"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- JS -->
+<script src="js/dashboard.js"></script>
+</body>
+</html>

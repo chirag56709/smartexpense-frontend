@@ -1,0 +1,284 @@
+/* ====================== Reset & Basic ====================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+/* ====================== Landing Page ====================== */
+body.landing {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.landing-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: center;
+  width: 350px;
+  max-width: 90%;
+  transition: transform 0.3s ease;
+}
+
+.landing-card:hover {
+  transform: translateY(-5px);
+}
+
+.landing-card h1 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+
+.landing-card p {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+.landing-buttons a {
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: 0.3s;
+  color: #fff;
+  font-size: 14px;
+}
+
+.landing-buttons a:first-child {
+  background: #4facfe;
+}
+
+.landing-buttons a:last-child {
+  background: #00f2fe;
+}
+
+.landing-buttons a:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+/* ====================== Auth Forms (Login / Signup) ====================== */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.auth-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  width: 350px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.auth-card h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
+
+.auth-card button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 50px;
+  background: #4facfe;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.auth-card button:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.auth-card p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+/* ====================== Dashboard ====================== */
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #4facfe;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.topbar nav button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background: #fff;
+  color: #4facfe;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.topbar nav button:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+/* Dashboard Layout */
+.dashboard {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Panels */
+aside.left-panel {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+}
+section.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cards */
+.summary-card, .card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+.summary-card.highlight {
+  border-left: 5px solid #4facfe;
+}
+.summary-card h4 {
+  margin-bottom: 12px;
+  color: #555;
+  font-size: 16px;
+}
+.summary-card p {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Inputs */
+input[type="number"], input[type="text"], input[type="date"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 50px;
+  background: #4facfe;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 5px;
+  font-size: 14px;
+}
+button:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+button.danger {
+  background: #ff6b6b;
+}
+button.danger:hover {
+  background: #ff4c4c;
+}
+
+/* Button group for income */
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Expense Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table th, table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+table th {
+  background: #f4f6f9;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media(max-width:900px) {
+  .dashboard {
+    flex-direction: column;
+  }
+  aside.left-panel, section.right-panel {
+    flex: 1;
+  }
+}
