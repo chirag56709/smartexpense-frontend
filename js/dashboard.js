@@ -23,17 +23,19 @@ const expenseTable = document.getElementById("expenseTable");
 let income = 0;
 let expenses = [];
 
-/* ================= FETCH DATA ================= */
+// Vercel backend base URL
+const API_BASE = "https://smartexpense-backend.vercel.app"; // <-- replace with your actual Vercel URL
 
+/* ================= FETCH DATA ================= */
 async function fetchData() {
     try {
-        const resIncome = await fetch(`http://localhost:5000/api/income/${userId}`);
+        const resIncome = await fetch(`${API_BASE}/api/income/${userId}`);
         const incomeData = await resIncome.json();
         income = incomeData.income || 0;
         totalIncome.textContent = `₹${income}`;
         incomeInput.value = income;
 
-        const resExpenses = await fetch(`http://localhost:5000/api/expense/${userId}`);
+        const resExpenses = await fetch(`${API_BASE}/api/expense/${userId}`);
         expenses = await resExpenses.json();
 
         renderExpenses();
@@ -44,14 +46,13 @@ async function fetchData() {
 }
 
 /* ================= INCOME ================= */
-
 saveIncomeBtn.addEventListener("click", async () => {
     income = Number(incomeInput.value) || 0;
     totalIncome.textContent = `₹${income}`;
     updateBalance();
 
     try {
-        await fetch(`http://localhost:5000/api/income/${userId}`, {
+        await fetch(`${API_BASE}/api/income/${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ income })
@@ -69,7 +70,6 @@ resetIncomeBtn.addEventListener("click", () => {
 });
 
 /* ================= ADD EXPENSE ================= */
-
 expenseForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -85,7 +85,7 @@ expenseForm.addEventListener("submit", async (e) => {
     updateBalance();
 
     try {
-        await fetch(`http://localhost:5000/api/expense/${userId}`, {
+        await fetch(`${API_BASE}/api/expense/${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(expense)
@@ -98,7 +98,6 @@ expenseForm.addEventListener("submit", async (e) => {
 });
 
 /* ================= RENDER EXPENSES ================= */
-
 function renderExpenses() {
     expenseTable.innerHTML = "";
 
@@ -121,8 +120,7 @@ function renderExpenses() {
     totalExpenses.textContent = `₹${totalExp}`;
 }
 
-/* ================= EDIT EXPENSE (NEW) ================= */
-
+/* ================= EDIT EXPENSE ================= */
 window.editExpense = async function (index) {
     const exp = expenses[index];
 
@@ -149,9 +147,8 @@ window.editExpense = async function (index) {
     renderExpenses();
     updateBalance();
 
-    // OPTIONAL backend update
     try {
-        await fetch(`http://localhost:5000/api/expense/${userId}/${index}`, {
+        await fetch(`${API_BASE}/api/expense/${userId}/${index}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(expenses[index])
@@ -162,7 +159,6 @@ window.editExpense = async function (index) {
 };
 
 /* ================= DELETE EXPENSE ================= */
-
 window.deleteExpense = function (index) {
     expenses.splice(index, 1);
     renderExpenses();
@@ -170,12 +166,10 @@ window.deleteExpense = function (index) {
 };
 
 /* ================= BALANCE ================= */
-
 function updateBalance() {
     const totalExp = expenses.reduce((acc, e) => acc + e.amount, 0);
     balance.textContent = `₹${income - totalExp}`;
 }
 
 /* ================= INIT ================= */
-
 fetchData();
