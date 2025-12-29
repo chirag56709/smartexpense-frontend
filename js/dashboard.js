@@ -1,175 +1,197 @@
+const API_BASE_URL = "https://smartexpense-backend.vercel.app";
+
+/******************** AUTH CHECK ********************/
 const userId = localStorage.getItem("userId");
 if (!userId) {
-    alert("Please login first!");
-    window.location.href = "login.html";
+  alert("Please login first!");
+  window.location.href = "login.html";
 }
 
-// Logout
+/******************** LOGOUT ********************/
 document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("userId");
-    window.location.href = "login.html";
+  localStorage.removeItem("userId");
+  window.location.href = "login.html";
 });
 
-// Elements
+/******************** ELEMENTS ********************/
 const incomeInput = document.getElementById("incomeInput");
 const saveIncomeBtn = document.getElementById("saveIncome");
 const resetIncomeBtn = document.getElementById("resetIncome");
+
 const totalIncome = document.getElementById("totalIncome");
 const totalExpenses = document.getElementById("totalExpenses");
 const balance = document.getElementById("balance");
+
 const expenseForm = document.getElementById("expenseForm");
 const expenseTable = document.getElementById("expenseTable");
 
+/******************** STATE ********************/
 let income = 0;
 let expenses = [];
 
-// Vercel backend base URL
-const API_BASE = "https://smartexpense-backend.vercel.app"; // <-- replace with your actual Vercel URL
-
-/* ================= FETCH DATA ================= */
+/******************** FETCH DATA ********************/
 async function fetchData() {
-    try {
-        const resIncome = await fetch(`${API_BASE}/api/income/${userId}`);
-        const incomeData = await resIncome.json();
-        income = incomeData.income || 0;
-        totalIncome.textContent = `₹${income}`;
-        incomeInput.value = income;
-
-        const resExpenses = await fetch(`${API_BASE}/api/expense/${userId}`);
-        expenses = await resExpenses.json();
-
-        renderExpenses();
-        updateBalance();
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-/* ================= INCOME ================= */
-saveIncomeBtn.addEventListener("click", async () => {
-    income = Number(incomeInput.value) || 0;
+  try {
+    // FETCH INCOME
+    const incomeRes = await fetch(`${API_BASE_URL}/api/income/${userId}`);
+    const incomeData = await incomeRes.json();
+    income = incomeData?.income || 0;
+    incomeInput.value = income;
     totalIncome.textContent = `₹${income}`;
-    updateBalance();
 
-    try {
-        await fetch(`${API_BASE}/api/income/${userId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ income })
-        });
-    } catch (err) {
-        console.error(err);
-    }
-});
-
-resetIncomeBtn.addEventListener("click", () => {
-    income = 0;
-    incomeInput.value = 0;
-    totalIncome.textContent = `₹0`;
-    updateBalance();
-});
-
-/* ================= ADD EXPENSE ================= */
-expenseForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const title = document.getElementById("title").value;
-    const category = document.getElementById("category").value;
-    const amount = Number(document.getElementById("amount").value);
-    const date = document.getElementById("date").value;
-
-    const expense = { title, category, amount, date };
-    expenses.push(expense);
+    // FETCH EXPENSES
+    const expenseRes = await fetch(`${API_BASE_URL}/api/expense/${userId}`);
+    expenses = await expenseRes.json();
 
     renderExpenses();
     updateBalance();
-
-    try {
-        await fetch(`${API_BASE}/api/expense/${userId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(expense)
-        });
-    } catch (err) {
-        console.error(err);
-    }
-
-    expenseForm.reset();
-});
-
-/* ================= RENDER EXPENSES ================= */
-function renderExpenses() {
-    expenseTable.innerHTML = "";
-
-    expenses.forEach((exp, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${exp.title}</td>
-            <td>${exp.category}</td>
-            <td>₹${exp.amount}</td>
-            <td>${exp.date}</td>
-            <td>
-                <button onclick="editExpense(${index})">Edit</button>
-                <button class="danger" onclick="deleteExpense(${index})">Delete</button>
-            </td>
-        `;
-        expenseTable.appendChild(tr);
-    });
-
-    const totalExp = expenses.reduce((acc, e) => acc + e.amount, 0);
-    totalExpenses.textContent = `₹${totalExp}`;
+  } catch (err) {
+    console.error("Fetch error:", err);
+    alert("Failed to load data from server");
+  }
 }
 
-/* ================= EDIT EXPENSE ================= */
-window.editExpense = async function (index) {
-    const exp = expenses[index];
+/******************** SAVE INCOME ********************/
+saveIncomeBtn.addEventListener("click", async () => {
+  income = Number(incomeInput.value) || 0;
+  totalIncome.textContent = `₹${income}`;
+  updateBalance();
 
-    const title = prompt("Edit Title", exp.title);
-    if (title === null) return;
+  try {
+    await fetch(`${API_BASE_URL}/api/income/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ income }),
+    });
+  } catch (err) {
+    console.error("Income save error:", err);
+  }
+});
 
-    const category = prompt("Edit Category", exp.category);
-    if (category === null) return;
+/******************** RESET INCOME ********************/
+resetIncomeBtn.addEventListener("click", async () => {
+  income = 0;
+  incomeInput.value = 0;
+  totalIncome.textContent = `₹0`;
+  updateBalance();
 
-    const amount = prompt("Edit Amount", exp.amount);
-    if (amount === null || isNaN(amount)) return;
+  try {
+    await fetch(`${API_BASE_URL}/api/income/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ income: 0 }),
+    });
+  } catch (err) {
+    console.error("Reset income error:", err);
+  }
+});
 
-    const date = prompt("Edit Date (YYYY-MM-DD)", exp.date);
-    if (date === null) return;
+/******************** ADD EXPENSE ********************/
+expenseForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    expenses[index] = {
-        ...exp,
+  const title = document.getElementById("title").value;
+  const category = document.getElementById("category").value;
+  const amount = Number(document.getElementById("amount").value);
+  const date = document.getElementById("date").value;
+
+  if (!title || !category || !amount || !date) {
+    return alert("Fill all expense fields");
+  }
+
+  const expense = { userId, title, category, amount, date };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/expense/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(expense),
+    });
+
+    if (res.ok) {
+      fetchData(); // reload from backend to ensure sync
+      expenseForm.reset();
+    }
+  } catch (err) {
+    console.error("Add expense error:", err);
+  }
+});
+
+/******************** RENDER EXPENSES ********************/
+function renderExpenses() {
+  expenseTable.innerHTML = "";
+
+  expenses.forEach((exp) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${exp.title}</td>
+      <td>${exp.category}</td>
+      <td>₹${exp.amount}</td>
+      <td>${exp.date}</td>
+      <td>
+        <button onclick="editExpense('${exp._id}')">Edit</button>
+        <button class="danger" onclick="deleteExpense('${exp._id}')">Delete</button>
+      </td>
+    `;
+    expenseTable.appendChild(tr);
+  });
+
+  const totalExp = expenses.reduce((sum, e) => sum + e.amount, 0);
+  totalExpenses.textContent = `₹${totalExp}`;
+}
+
+/******************** EDIT EXPENSE ********************/
+window.editExpense = async function (expenseId) {
+  const exp = expenses.find((e) => e._id === expenseId);
+  if (!exp) return;
+
+  const title = prompt("Edit Title", exp.title);
+  if (title === null) return;
+
+  const category = prompt("Edit Category", exp.category);
+  if (category === null) return;
+
+  const amount = prompt("Edit Amount", exp.amount);
+  if (amount === null || isNaN(amount)) return;
+
+  const date = prompt("Edit Date (YYYY-MM-DD)", exp.date);
+  if (date === null) return;
+
+  try {
+    await fetch(`${API_BASE_URL}/api/expense/${expenseId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         title,
         category,
         amount: Number(amount),
-        date
-    };
+        date,
+      }),
+    });
 
-    renderExpenses();
-    updateBalance();
-
-    try {
-        await fetch(`${API_BASE}/api/expense/${userId}/${index}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(expenses[index])
-        });
-    } catch (err) {
-        console.error(err);
-    }
+    fetchData();
+  } catch (err) {
+    console.error("Edit expense error:", err);
+  }
 };
 
-/* ================= DELETE EXPENSE ================= */
-window.deleteExpense = function (index) {
-    expenses.splice(index, 1);
-    renderExpenses();
-    updateBalance();
+/******************** DELETE EXPENSE ********************/
+window.deleteExpense = async function (expenseId) {
+  if (!confirm("Delete this expense?")) return;
+
+  try {
+    await fetch(`${API_BASE_URL}/api/expense/${expenseId}`, { method: "DELETE" });
+    fetchData();
+  } catch (err) {
+    console.error("Delete expense error:", err);
+  }
 };
 
-/* ================= BALANCE ================= */
+/******************** BALANCE ********************/
 function updateBalance() {
-    const totalExp = expenses.reduce((acc, e) => acc + e.amount, 0);
-    balance.textContent = `₹${income - totalExp}`;
+  const totalExp = expenses.reduce((sum, e) => sum + e.amount, 0);
+  balance.textContent = `₹${income - totalExp}`;
 }
 
-/* ================= INIT ================= */
+/******************** INIT ********************/
 fetchData();
