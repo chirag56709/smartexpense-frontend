@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SmartExpense Dashboard</title>
-  <!-- CSS link -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,7 +14,6 @@
   <button id="logoutBtn">Logout</button>
 </header>
 
-<!-- MAIN DASHBOARD -->
 <main class="dashboard">
 
   <!-- LEFT PANEL -->
@@ -48,6 +46,16 @@
   <!-- RIGHT PANEL -->
   <section class="right-panel">
 
+    <!-- MONTH FILTER -->
+    <div class="card">
+      <h3>Filter by Month</h3>
+      <div style="display:flex; gap:10px;">
+        <select id="monthFilter"></select>
+        <select id="yearFilter"></select>
+      </div>
+    </div>
+
+    <!-- ADD EXPENSE -->
     <div class="card">
       <h3>Add Expense</h3>
       <form id="expenseForm">
@@ -59,6 +67,7 @@
       </form>
     </div>
 
+    <!-- EXPENSE LIST -->
     <div class="card expense-list">
       <h3>Expenses</h3>
       <table>
@@ -76,10 +85,8 @@
     </div>
 
   </section>
-
 </main>
 
-<!-- JS -->
 <script src="js/dashboard.js"></script>
 </body>
 </html>
