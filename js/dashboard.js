@@ -141,5 +141,28 @@ window.deleteExpense = async (id) => {
   await fetch(`${API_BASE_URL}/api/expense/${id}`, { method: "DELETE" });
   fetchData();
 };
+/************ THEME TOGGLE ************/
+const themeToggle = document.getElementById("themeToggle");
+
+function setTheme(theme) {
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  } else {
+    document.body.classList.remove("dark");
+    themeToggle.textContent = "🌙";
+  }
+  localStorage.setItem("theme", theme);
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme") || "light";
+setTheme(savedTheme);
+
+themeToggle.addEventListener("click", () => {
+  const current = document.body.classList.contains("dark") ? "dark" : "light";
+  setTheme(current === "dark" ? "light" : "dark");
+});
+
 
 fetchData();
