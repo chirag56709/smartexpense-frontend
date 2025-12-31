@@ -246,6 +246,32 @@ th {
   background: rgba(0,0,0,0.05);
 }
 
+/* ===== Auth pages center fix ===== */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa, #e4ebf5);
+}
+
+.auth-card {
+  background: #ffffff;
+  padding: 35px 30px;
+  width: 350px;
+  max-width: 90%;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+/* Mobile safe */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 25px 20px;
+  }
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .dashboard {
