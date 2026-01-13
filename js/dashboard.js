@@ -15,14 +15,20 @@ document.getElementById("logoutBtn").onclick = () => {
 
 /* ELEMENTS */
 const incomeInput = document.getElementById("incomeInput");
+const saveIncomeBtn = document.getElementById("saveIncome");
+const resetIncomeBtn = document.getElementById("resetIncome");
+
 const totalIncome = document.getElementById("totalIncome");
 const totalExpenses = document.getElementById("totalExpenses");
 const balance = document.getElementById("balance");
+
 const expenseForm = document.getElementById("expenseForm");
 const expenseTable = document.getElementById("expenseTable");
+
 const monthFilter = document.getElementById("monthFilter");
 const yearFilter = document.getElementById("yearFilter");
 
+/* STATE */
 let income = 0;
 let expenses = [];
 
@@ -46,19 +52,74 @@ yearFilter.value = currentYear;
 
 /* FETCH DATA */
 async function fetchData() {
-  const incomeRes = await fetch(`${API_BASE_URL}/api/income/${userId}`);
-  const incomeData = await incomeRes.json();
-  income = incomeData.income || 0;
-  incomeInput.value = income;
-  totalIncome.textContent = `₹${income}`;
+  try {
+    const incomeRes = await fetch(`${API_BASE_URL}/api/income/${userId}`);
+    const incomeData = await incomeRes.json();
 
-  const expRes = await fetch(`${API_BASE_URL}/api/expense/${userId}`);
-  expenses = await expRes.json();
+    income = incomeData.income || 0;
+    incomeInput.value = income;
+    totalIncome.textContent = `₹${income}`;
 
-  renderExpenses();
+    const expRes = await fetch(`${API_BASE_URL}/api/expense/${userId}`);
+    expenses = await expRes.json();
+
+    renderExpenses();
+  } catch (err) {
+    console.error("Fetch error:", err);
+    alert("Failed to load data");
+  }
 }
 
-/* FILTER + RENDER */
+/* SAVE INCOME ✅ (THIS WAS MISSING) */
+saveIncomeBtn.onclick = async () => {
+  const newIncome = Number(incomeInput.value);
+
+  if (isNaN(newIncome)) {
+    alert("Invalid income");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/income/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ income: newIncome })
+    });
+
+    const data = await res.json();
+
+    income = data.income;
+    totalIncome.textContent = `₹${income}`;
+    renderExpenses();
+
+    alert("Income saved");
+  } catch (err) {
+    console.error("Income save error:", err);
+    alert("Failed to save income");
+  }
+};
+
+/* RESET INCOME */
+resetIncomeBtn.onclick = async () => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/income/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ income: 0 })
+    });
+
+    const data = await res.json();
+
+    income = data.income;
+    incomeInput.value = 0;
+    totalIncome.textContent = "₹0";
+    renderExpenses();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/* RENDER EXPENSES */
 function renderExpenses() {
   expenseTable.innerHTML = "";
 
@@ -92,7 +153,7 @@ function renderExpenses() {
   balance.textContent = `₹${income - totalExp}`;
 }
 
-/* EVENTS */
+/* FILTER EVENTS */
 monthFilter.onchange = renderExpenses;
 yearFilter.onchange = renderExpenses;
 
@@ -117,7 +178,7 @@ expenseForm.onsubmit = async (e) => {
   fetchData();
 };
 
-/* EDIT */
+/* EDIT EXPENSE */
 window.editExpense = async (id) => {
   const exp = expenses.find(e => e._id === id);
   if (!exp) return;
@@ -134,14 +195,15 @@ window.editExpense = async (id) => {
   fetchData();
 };
 
-/* DELETE */
+/* DELETE EXPENSE */
 window.deleteExpense = async (id) => {
   if (!confirm("Delete expense?")) return;
 
   await fetch(`${API_BASE_URL}/api/expense/${id}`, { method: "DELETE" });
   fetchData();
 };
-/************ THEME TOGGLE ************/
+
+/* THEME TOGGLE */
 const themeToggle = document.getElementById("themeToggle");
 
 function setTheme(theme) {
@@ -155,14 +217,11 @@ function setTheme(theme) {
   localStorage.setItem("theme", theme);
 }
 
-// Load saved theme
-const savedTheme = localStorage.getItem("theme") || "light";
-setTheme(savedTheme);
+setTheme(localStorage.getItem("theme") || "light");
 
-themeToggle.addEventListener("click", () => {
-  const current = document.body.classList.contains("dark") ? "dark" : "light";
-  setTheme(current === "dark" ? "light" : "dark");
-});
+themeToggle.onclick = () => {
+  setTheme(document.body.classList.contains("dark") ? "light" : "dark");
+};
 
-
+/* INIT */
 fetchData();
