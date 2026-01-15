@@ -1,4 +1,4 @@
-/* ================= RESET ================= */
+/* = RESET = */
 * {
   margin: 0;
   padding: 0;
@@ -6,7 +6,7 @@
   font-family: "Segoe UI", Tahoma, sans-serif;
 }
 
-/* ================= ROOT VARIABLES ================= */
+/* = ROOT VARIABLES =*/
 :root {
   --bg: #f4f6f9;
   --card: #ffffff;
@@ -27,14 +27,14 @@ body.dark {
   --primary-dark: #4f8fe0;
 }
 
-/* ================= GLOBAL ================= */
+/* = GLOBAL = */
 body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
 }
 
-/* ================= LANDING / INDEX ================= */
+/* = LANDING / INDEX = */
 .landing-wrapper {
   height: 100vh;
   display: flex;
@@ -81,7 +81,7 @@ body {
   background: var(--primary-dark);
 }
 
-/* ================= AUTH (LOGIN / SIGNUP) ================= */
+/* = AUTH (LOGIN / SIGNUP) = */
 .auth-wrapper {
   height: 100vh;
   display: flex;
@@ -140,7 +140,7 @@ body {
   font-weight: 600;
 }
 
-/* ================= TOPBAR ================= */
+/* = TOPBAR = */
 .topbar {
   background: var(--card);
   padding: 15px 25px;
@@ -166,7 +166,7 @@ body {
   font-weight: 600;
 }
 
-/* ================= DASHBOARD ================= */
+/* = DASHBOARD = */
 .dashboard {
   display: flex;
   gap: 20px;
@@ -179,7 +179,7 @@ body {
   min-width: 280px;
 }
 
-/* ================= CARDS ================= */
+/* = CARDS = */
 .summary-card,
 .card {
   background: var(--card);
@@ -204,7 +204,7 @@ body {
   border-left: 5px solid var(--primary);
 }
 
-/* ================= FORM ================= */
+/* = FORM = */
 .card input,
 .card button {
   width: 100%;
@@ -230,7 +230,7 @@ button.danger {
   background: var(--danger);
 }
 
-/* ================= TABLE ================= */
+/* = TABLE = */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -246,7 +246,7 @@ th {
   background: rgba(0,0,0,0.05);
 }
 
-/* ===== Auth pages center fix ===== */
+
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
@@ -265,14 +265,14 @@ th {
   text-align: center;
 }
 
-/* Mobile safe */
+
 @media (max-width: 480px) {
   .auth-card {
     padding: 25px 20px;
   }
 }
 
-/* ================= RESPONSIVE ================= */
+
 @media (max-width: 900px) {
   .dashboard {
     flex-direction: column;
