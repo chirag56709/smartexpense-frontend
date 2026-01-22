@@ -70,7 +70,7 @@ async function fetchData() {
   }
 }
 
-/* SAVE INCOME ✅ (THIS WAS MISSING) */
+/* SAVE INCOME */
 saveIncomeBtn.onclick = async () => {
   const newIncome = Number(incomeInput.value);
 
